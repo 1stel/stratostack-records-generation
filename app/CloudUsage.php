@@ -29,6 +29,6 @@ class CloudUsage extends Model
                         14  // VPN Usage
                 ];
 
-        return $query->whereIn('usage_type', $billable);
+                return $query->whereIn('usage_type', $billable);
     }
 }
