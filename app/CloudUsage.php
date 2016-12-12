@@ -18,7 +18,7 @@ class CloudUsage extends Model
     {
 
         // Setup billable records
-                $billable = array(
+                $billable = [
                         2, // VM Allocated
                         4, // Network Sent
                         5, // Network Received
@@ -27,7 +27,7 @@ class CloudUsage extends Model
                         11, // Load Balancer
                         12, // Port Forwarding
                         14  // VPN Usage
-                );
+                ];
 
         return $query->whereIn('usage_type', $billable);
     }

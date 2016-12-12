@@ -23,7 +23,7 @@ class PricesController extends Controller
         $storageTypes = StorageType::whereActive('1')->get();
 
         $prices = SiteConfig::where('parameter', 'LIKE', '%Price')->get();
-        $ratioPrices = array();
+        $ratioPrices = [];
 
         if ($prices->count() > 0) {
             foreach ($prices as $price) {

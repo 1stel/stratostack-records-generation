@@ -94,7 +94,7 @@ class RecordCustomVM extends Command
                 $this->info('We have a custom service offering');
                 // We need to grab the custom fields for this VM.
                 $vmDetails = \App\VmInstance::find($event->resource_id)->details->toArray();
-                $resources = array();
+                $resources = [];
 
                 foreach ($vmDetails as $detail) {
                     if ('cpuNumber' == $detail->name || 'cpuSpeed' == $detail->name || 'memory' == $detail->name) {
