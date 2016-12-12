@@ -2,8 +2,9 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class Volume extends Model {
+class Volume extends Model
+{
 
-	//
-	protected $connection = 'cloud';
+    //
+    protected $connection = 'cloud';
 }

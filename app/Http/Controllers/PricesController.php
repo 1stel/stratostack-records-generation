@@ -8,14 +8,15 @@ use App\SiteConfig;
 use App\StorageType;
 use Illuminate\Http\Request;
 
-class PricesController extends Controller {
+class PricesController extends Controller
+{
 
     public function __construct()
     {
         $this->middleware('auth');
     }
 
-	//
+    //
     public function index()
     {
         $priceMethod = SiteConfig::whereParameter('priceMethod')->first();
@@ -24,10 +25,8 @@ class PricesController extends Controller {
         $prices = SiteConfig::where('parameter', 'LIKE', '%Price')->get();
         $ratioPrices = array();
 
-        if ($prices->count() > 0)
-        {
-            foreach ($prices as $price)
-            {
+        if ($prices->count() > 0) {
+            foreach ($prices as $price) {
                 $ratioPrices[$price->parameter] = $price->data;
             }
         }
@@ -49,10 +48,8 @@ class PricesController extends Controller {
 
     public function updateFixed(Request $request)
     {
-        foreach ($request->all() as $key => $val)
-        {
-            if (strpos($key, 'Price') !== FALSE)
-            {
+        foreach ($request->all() as $key => $val) {
+            if (strpos($key, 'Price') !== false) {
                 $price = SiteConfig::firstOrCreate(['parameter' => $key]);
                 $price->data = $val;
                 $price->save();
@@ -68,8 +65,7 @@ class PricesController extends Controller {
 
         $elements = ['CPU' => 'CPU Cores', 'RAM' => "RAM"];
 
-        foreach ($storageTypes as $st)
-        {
+        foreach ($storageTypes as $st) {
             $elements[$st->tag] = "$st->storage_type - $st->tag";
         }
 
@@ -80,8 +76,9 @@ class PricesController extends Controller {
     {
         $data = $request->all();
 
-        if ($data['element'] == 'CPU')
+        if ($data['element'] == 'CPU') {
             $data['quantity_type'] = null;
+        }
 
         ElementPrice::create($data);
 
@@ -96,8 +93,7 @@ class PricesController extends Controller {
 
         $elements = ['CPU' => 'CPU Cores', 'RAM' => "RAM"];
 
-        foreach ($storageTypes as $st)
-        {
+        foreach ($storageTypes as $st) {
             $elements[$st->tag] = "$st->storage_type - $st->tag";
         }
 

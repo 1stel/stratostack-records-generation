@@ -3,7 +3,8 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UsageDisk extends Migration {
+class UsageDisk extends Migration
+{
 
     /**
      * Run the migrations.
@@ -13,8 +14,7 @@ class UsageDisk extends Migration {
     public function up()
     {
         // VM Instance usage DB
-        Schema::create('usage_disk', function (Blueprint $table)
-        {
+        Schema::create('usage_disk', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('zoneId', 40);
             $table->string('accountId', 40);
@@ -40,5 +40,4 @@ class UsageDisk extends Migration {
         //
         Schema::drop('usage_disk');
     }
-
 }

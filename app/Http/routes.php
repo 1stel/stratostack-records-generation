@@ -27,8 +27,8 @@ Route::post('settings/ACStest', ['as' => 'settings.acstest', 'uses' => 'Settings
 Route::post('settings/syncACS', ['as' => 'settings.syncacs', 'uses' => 'SettingsController@syncACS']);
 
 Route::controllers([
-	'auth' => 'Auth\AuthController',
-	'password' => 'Auth\PasswordController',
+    'auth' => 'Auth\AuthController',
+    'password' => 'Auth\PasswordController',
 ]);
 
 Route::resource('reseller', 'ResellerController');

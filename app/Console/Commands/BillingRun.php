@@ -6,7 +6,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use DB;
 
-class BillingRun extends Command {
+class BillingRun extends Command
+{
 
     /**
      * The console command name.
@@ -53,30 +54,29 @@ class BillingRun extends Command {
 
         $uuidLookup = [];
 
-        foreach ($dataTypes as $table => $type)
-        {
+        foreach ($dataTypes as $table => $type) {
             $dbInfo = DB::table($table)->get();
             $uuidLookup[$type] = [];
 
-            foreach ($dbInfo as $info)
+            foreach ($dbInfo as $info) {
                 $uuidLookup[$type][$info->id] = $info->uuid;
+            }
         }
 
         $diskInfo = DB::table('cloud.disk_offering')->get();
         $diskOfferings = [];
 
-        foreach ($diskInfo as $do)
+        foreach ($diskInfo as $do) {
             $diskOfferings[$do->id] = $do->tags;
+        }
 
         // Grab yesterday's records
         $yesterday = date('Y-m-d', time() - 84600);
 
-        $records = App\CloudUsage::like('start_date', $yesterday . '%')->billable()->get()->each(function ($record) use ($uuidLookup, $diskOfferings)
-        {
+        $records = App\CloudUsage::like('start_date', $yesterday . '%')->billable()->get()->each(function ($record) use ($uuidLookup, $diskOfferings) {
             $recordType = '';
 
-            switch ($record->usage_type)
-            {
+            switch ($record->usage_type) {
                 case 2:
                     $recordType = 'VM Instance';
 
@@ -86,22 +86,19 @@ class BillingRun extends Command {
                     if (null == $serviceOffering->cpu &&
                         null == $serviceOffering->speed &&
                         null == $serviceOffering->ram_size
-                    )
-                    {
-                        // Our service offering is Custom.  Grab its resources from our custom table.
-                        $resources = App\VmResources::find($record->vm_instance_id);
-                        $cpuNumber = $resources->cpuNumber;
-                        $cpuSpeed = $resources->cpuSpeed;
-                        $memory = $resources->memory;
-                    }
-                    else
-                    {
+                        ) {
+                    // Our service offering is Custom.  Grab its resources from our custom table.
+                            $resources = App\VmResources::find($record->vm_instance_id);
+                            $cpuNumber = $resources->cpuNumber;
+                            $cpuSpeed = $resources->cpuSpeed;
+                            $memory = $resources->memory;
+                    } else {
                         $cpuNumber = $serviceOffering->cpu;
                         $cpuSpeed = $serviceOffering->speed;
                         $memory = $serviceOffering->ram_size;
                     }
 
-                    App\UsageVm::create([
+                        App\UsageVm::create([
                         'zoneId'            => $uuidLookup['zones'][$record->zone_id],
                         'accountId'         => $uuidLookup['accounts'][$record->account_id],
                         'domainId'          => $uuidLookup['domains'][$record->domain_id],
@@ -116,7 +113,7 @@ class BillingRun extends Command {
                         'memory'            => $memory,
                         'startDate'         => $record->start_date,
                         'endDate'           => $record->end_date
-                    ]);
+                        ]);
                     break;
 
                 case 4:
@@ -139,17 +136,15 @@ class BillingRun extends Command {
                     // Fetch the VM instance this volume belongs to.
                     $vol = App\Volume::find($record->usage_id);
 
-                    try
-                    {
+                    try {
                         $instance = App\VmInstance::find($vol->instance_id);
-                    }
-                    catch (\Exception $e)
-                    {
+                    } catch (\Exception $e) {
                         continue; // Ignored bad record.
                     }
 
-                    if (!($instance instanceof App\VmInstance))
+                    if (!($instance instanceof App\VmInstance)) {
                         continue; // Ignore this record, its bad for some reason.
+                    }
 
                     App\UsageDisk::create([
                         'zoneId'       => $uuidLookup['zones'][$record->zone_id],
@@ -237,7 +232,6 @@ class BillingRun extends Command {
 
             $this->info('Found a record of type ' . $recordType);
         });
-
     }
 
     /**
@@ -270,8 +264,7 @@ class BillingRun extends Command {
 
     private function getList($name)
     {
-        switch ($name)
-        {
+        switch ($name) {
             case 'domain':
                 break;
 
@@ -282,5 +275,4 @@ class BillingRun extends Command {
                 break;
         }
     }
-
 }
