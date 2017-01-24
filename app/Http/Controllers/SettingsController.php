@@ -10,7 +10,8 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Laracasts\Flash\Flash;
 
-class SettingsController extends Controller {
+class SettingsController extends Controller
+{
 
     //
     public function __construct()
@@ -39,8 +40,7 @@ class SettingsController extends Controller {
         foreach (['mgmtServer', 'apiKey', 'secretKey', 'hoursInMonth'] as $setting) {
             $$setting = SiteCOnfig::whereParameter($setting)->first();
 
-            if ($$setting->data != $request->$setting)
-            {
+            if ($$setting->data != $request->$setting) {
                 $$setting->data = $request->$setting;
                 $$setting->save();
             }
@@ -55,21 +55,17 @@ class SettingsController extends Controller {
         $apiKey = SiteConfig::whereParameter('apiKey')->first();
         $secretKey = SiteConfig::whereParameter('secretKey')->first();
 
-        foreach (['mgmtServer', 'apiKey', 'secretKey'] as $setting)
-        {
-            if ($$setting->data != $request->$setting)
-            {
+        foreach (['mgmtServer', 'apiKey', 'secretKey'] as $setting) {
+            if ($$setting->data != $request->$setting) {
                 $$setting->data = $request->$setting;
                 $$setting->save();
             }
         }
 
-        try
-        {
+        try {
             $acs = app('cloudstack');
 
-            if (is_array($acs))
-            {
+            if (is_array($acs)) {
                 Flash::error($acs['error']);
 
                 return -1;
@@ -77,21 +73,16 @@ class SettingsController extends Controller {
 
             $result = $acs->listCapabilities();
 
-            if (isset($result->capability->cloudstackversion))
-            {
+            if (isset($result->capability->cloudstackversion)) {
                 Flash::success('Successfully contacted management server.');
 
                 return 1;
-            }
-            else
-            {
+            } else {
                 Flash::error('Unable to contact management server.');
 
                 return -1;
             }
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             Flash::error($e->getMessage());
 
             return -1;
@@ -102,25 +93,26 @@ class SettingsController extends Controller {
     {
         $acs = app('cloudstack');
 
-        if (is_array($acs))
+        if (is_array($acs)) {
             return -1;
+        }
 
         $offerings = $acs->listDiskOfferings();
 
         $tags = [];
-        foreach ($offerings as $offering)
-        {
-            // Extract a list of tags
-            if (!isset($offering->tags))
+        foreach ($offerings as $offering) {
+        // Extract a list of tags
+            if (!isset($offering->tags)) {
                 continue;
+            }
 
-            if (!in_array($offering->tags, $tags))
+            if (!in_array($offering->tags, $tags)) {
                 $tags[] = $offering->tags;
+            }
         }
 
-        foreach ($tags as $tag)
-        {
-            // Create a config price and a storage tag if they don't exist.
+        foreach ($tags as $tag) {
+        // Create a config price and a storage tag if they don't exist.
             StorageType::firstOrCreate(['tag' => $tag]);
             SiteConfig::firstOrCreate(['parameter' => $tag . 'Price']);
         }

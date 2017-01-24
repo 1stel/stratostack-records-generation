@@ -2,14 +2,15 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class VmInstance extends Model {
+class VmInstance extends Model
+{
 
-	//
-	protected $connection = 'cloud';
-	protected $table = 'vm_instance';
+    //
+    protected $connection = 'cloud';
+    protected $table = 'vm_instance';
 
-    public function details() {
+    public function details()
+    {
         return $this->hasMany('App\UserVmDetail', 'vm_id');
     }
 }
-

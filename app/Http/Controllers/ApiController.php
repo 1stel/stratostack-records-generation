@@ -23,19 +23,19 @@ class ApiController extends Controller
         // Request should contain an API key, Secret key, start date and end date.
         $acs = app('cloudstack');
 
-        if (is_array($acs))
+        if (is_array($acs)) {
             return response()->json(['error' => 'Internal server error. ' . $acs['error']]);
+        }
 
         $loginResponse = $acs->listUsers(['domainid' => $domainid]);
 
-        foreach ($loginResponse as $user)
-        {
-            if (!isset($user->apikey, $user->secretkey))
+        foreach ($loginResponse as $user) {
+            if (!isset($user->apikey, $user->secretkey)) {
                 continue;
+            }
 
-            if ($apiKey == $user->apikey && $secretKey == $user->secretkey)
-            {
-                // User found, give up the records.
+            if ($apiKey == $user->apikey && $secretKey == $user->secretkey) {
+            // User found, give up the records.
                 $usageGeneral = UsageGeneral::where('domainId', '=', $domainid)->where('startDate', '>=', $lastDate)->get()->toArray();
                 $usageVMs = UsageVm::where('domainId', '=', $domainid)->where('startDate', '>=', $lastDate)->get()->toArray();
                 $usageDisk = UsageDisk::where('domainId', '=', $domainid)->where('startDate', '>=', $lastDate)->get()->toArray();
@@ -51,12 +51,9 @@ class ApiController extends Controller
     {
         $priceMethod = SiteConfig::whereParameter('priceMethod')->first();
 
-        if ($priceMethod->data == 'fixedRatio')
-        {
+        if ($priceMethod->data == 'fixedRatio') {
             $prices = SiteConfig::where('parameter', 'LIKE', '%Price')->get();
-        }
-        else if ($priceMethod->data == 'elementPrice')
-        {
+        } else if ($priceMethod->data == 'elementPrice') {
             $prices = ElementPrice::whereActive('1')->get();
         }
 

@@ -4,7 +4,8 @@ use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 use App\SiteConfig;
 
-class SiteConfigSeeder extends Seeder {
+class SiteConfigSeeder extends Seeder
+{
 
     public function run()
     {
@@ -23,5 +24,4 @@ class SiteConfigSeeder extends Seeder {
         // Billing settings
         SiteConfig::create(['parameter' => 'hoursInMonth']);
     }
-
 }

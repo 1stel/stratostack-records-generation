@@ -2,11 +2,12 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class UsageGeneral extends Model {
+class UsageGeneral extends Model
+{
 
-	//
-	protected $table = 'usage_general';
-	protected $fillable = ['zoneId', 'accountId', 'domainId', 'type', 'usage', 'vmInstanceId', 'templateId', 'startDate', 'endDate'];
+    //
+    protected $table = 'usage_general';
+    protected $fillable = ['zoneId', 'accountId', 'domainId', 'type', 'usage', 'vmInstanceId', 'templateId', 'startDate', 'endDate'];
 
-	public $timestamps = false;
+    public $timestamps = false;
 }

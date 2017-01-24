@@ -2,34 +2,34 @@
 
 use App\Http\Requests\Request;
 
-class ResellerRequest extends Request {
+class ResellerRequest extends Request
+{
 
-	/**
-	 * Determine if the user is authorized to make this request.
-	 *
-	 * @return bool
-	 */
-	public function authorize()
-	{
-		return true; // !! NEEDS REVISION !!
-	}
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return true; // !! NEEDS REVISION !!
+    }
 
-	/**
-	 * Get the validation rules that apply to the request.
-	 *
-	 * @return array
-	 */
-	public function rules()
-	{
-		return [
-			'name' => 'required|unique:resellers',
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules()
+    {
+        return [
+            'name' => 'required|unique:resellers',
             'address' => 'required',
             'city' => 'required',
             'state' => 'required',
             'zip' => 'required',
             'phone' => 'required',
             'email' => 'required|max:60'
-		];
-	}
-
+        ];
+    }
 }

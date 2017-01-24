@@ -9,7 +9,8 @@ use Flash;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class UserController extends Controller {
+class UserController extends Controller
+{
 
     public function __construct()
     {
@@ -102,15 +103,12 @@ class UserController extends Controller {
 
         $user = Auth::User();
 
-        if (Auth::attempt(['email' => $user->email, 'password' => $request->pass]))
-        {
+        if (Auth::attempt(['email' => $user->email, 'password' => $request->pass])) {
             $user->password = bcrypt($request->newpass);
             $user->save();
 
             return redirect()->back();
-        }
-        else
-        {
+        } else {
             // Return back with errors
             Flash::error('Current password is incorrect.');
 

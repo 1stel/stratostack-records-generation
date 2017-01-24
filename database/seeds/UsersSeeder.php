@@ -4,7 +4,8 @@ use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 use App\User;
 
-class UsersSeeder extends Seeder {
+class UsersSeeder extends Seeder
+{
 
     public function run()
     {
@@ -16,5 +17,4 @@ class UsersSeeder extends Seeder {
                       'role'     => 'Admin'
         ]);
     }
-
 }

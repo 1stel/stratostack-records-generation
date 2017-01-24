@@ -8,7 +8,8 @@ use App\UsageEvent;
 use App\VmResources;
 use DB;
 
-class RecordCustomVM extends Command {
+class RecordCustomVM extends Command
+{
 
     /**
      * The console command name.
@@ -42,35 +43,36 @@ class RecordCustomVM extends Command {
     public function fire()
     {
         // This process isn't necessary for resellers
-        if ('true' == env('RESELLER'))
+        if ('true' == env('RESELLER')) {
             dd('We are a reseller.');
+        }
 
         // Grab all new events concerning virtual machine creation or service offering changes.
         $eventId = Config::firstOrCreate(['parameter' => 'lastEventId']);
 
-        if (null == $eventId->data)
+        if (null == $eventId->data) {
             $eventId->data = 0; // Initialize the parameter with a value.
+        }
 
         $this->info('Last Processed Event ID is: [' . $eventId->data . ']');
 
         $maxEventId = UsageEvent::max('id');
         $this->info('Max ID in Event table: [' . $maxEventId . ']');
 
-        if ($eventId->data == $maxEventId) // If there are no new events, no processing is required.
+        if ($eventId->data == $maxEventId) { // If there are no new events, no processing is required.
             exit;
+        }
 
         $events = UsageEvent::where('id', '>', $eventId->data)
             ->where('id', '<=', $maxEventId)
-            ->where(function ($query)
-            {
+            ->where(function ($query) {
                 $query->where('type', '=', 'VM.CREATE')
                     ->orWhere('type', '=', 'VM.UPGRADE');
             })
             ->get();
 
         // Iterate over each event and process
-        $events->each(function ($event)
-        {
+        $events->each(function ($event) {
             // In this context:
             // resource_id = vm_instance_id
             // type = Event type
@@ -88,17 +90,16 @@ class RecordCustomVM extends Command {
                 ->first();
 
             // If we have a result, the Service Offering is custom.
-            if (isset($so->id))
-            {
+            if (isset($so->id)) {
                 $this->info('We have a custom service offering');
                 // We need to grab the custom fields for this VM.
                 $vmDetails = \App\VmInstance::find($event->resource_id)->details->toArray();
-                $resources = array();
+                $resources = [];
 
-                foreach ($vmDetails as $detail)
-                {
-                    if ('cpuNumber' == $detail->name || 'cpuSpeed' == $detail->name || 'memory' == $detail->name)
+                foreach ($vmDetails as $detail) {
+                    if ('cpuNumber' == $detail->name || 'cpuSpeed' == $detail->name || 'memory' == $detail->name) {
                         $resources["$detail->name"] = $detail->value;
+                    }
                 }
                 $resources['vmInstanceId'] = $event->resource_id;
 
@@ -130,5 +131,4 @@ class RecordCustomVM extends Command {
     {
         return [];
     }
-
 }

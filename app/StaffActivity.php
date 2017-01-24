@@ -2,7 +2,8 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class StaffActivity extends Model {
+class StaffActivity extends Model
+{
 
     //
     protected $table = 'staff_activity';

@@ -2,9 +2,10 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class UsageEvent extends Model {
+class UsageEvent extends Model
+{
 
-	//
+    //
     protected $connection = 'cloud';
     protected $table = 'usage_event';
 

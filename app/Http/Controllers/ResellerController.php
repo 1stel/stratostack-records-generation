@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use App\Reseller;
 use Flash;
 
-class ResellerController extends Controller {
+class ResellerController extends Controller
+{
 
     public function __construct()
     {
@@ -104,5 +105,4 @@ class ResellerController extends Controller {
 
         return 1;
     }
-
 }
