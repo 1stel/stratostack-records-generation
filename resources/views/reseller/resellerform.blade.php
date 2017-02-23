@@ -70,7 +70,7 @@
     <div class="form-group">
         {!! Form::label('apikey', 'API Key:', ['class' => 'col-sm-1 control-label']) !!}
         <div class="col-sm-11">
-            <input type="text" name="apieky" value="{{ $apikey }}" readonly class="form-control">
+            <input type="text" name="apikey" value="{{ $apikey }}" readonly class="form-control">
         </div>
     </div>
 
